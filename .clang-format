@@ -1,0 +1,6 @@
+BasedOnStyle: GNU
+
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignConsecutiveMacros: true
+SortIncludes: false

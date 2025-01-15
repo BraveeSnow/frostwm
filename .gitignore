@@ -1,0 +1,9 @@
+# build artifacts
+build/
+builddir/
+
+# doxygen
+docs/
+
+# development environment
+.vscode/
