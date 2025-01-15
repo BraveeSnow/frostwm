@@ -34,6 +34,8 @@ struct frost_monitor
  *
  * @param listener The @ref wl_listener associated with the event.
  * @param data A @ref wlr_output pointer referencing the connected monitor.
+ * 
+ * @internal
  */
 void on_monitor_connected_notify (struct wl_listener *listener, void *data);
 

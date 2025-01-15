@@ -3,6 +3,14 @@
 #include <stdlib.h>
 #include "frostwm/log.h"
 
+/**
+ * @brief Automatically sets the given monitor's mode.
+ *
+ * TODO: this should later be able to set mode according to the user's
+ * configuration file.
+ *
+ * @internal
+ */
 static void
 set_monitor_mode (struct frost_monitor *restrict mon,
                   struct wlr_allocator *alloc, struct wlr_renderer *render)
@@ -18,7 +26,6 @@ set_monitor_mode (struct frost_monitor *restrict mon,
     }
 
   // set default monitor mode
-  // TODO: read from config file to set specific mode
   wlr_output_state_init (&state);
   wlr_output_init_render (mon->output, alloc, render);
   wlr_output_state_set_enabled (&state, true);
@@ -58,6 +65,11 @@ on_monitor_request_state_notify (struct wl_listener *listener, void *data)
   wlr_output_commit_state (mon->output, event->state);
 }
 
+/**
+ * @brief Triggers when a monitor is destroyed.
+ *
+ * @internal
+ */
 static void
 on_monitor_destroy_notify (struct wl_listener *listener, void *data)
 {
@@ -74,6 +86,14 @@ on_monitor_destroy_notify (struct wl_listener *listener, void *data)
   free (mon);
 }
 
+/**
+ * @brief Triggers when a monitor has been connected and sets mode.
+ *
+ * This callback should only handle setting up events for the related monitor.
+ * For setting mode, modify @ref set_monitor_mode instead.
+ *
+ * @internal
+ */
 void
 on_monitor_connected_notify (struct wl_listener *listener, void *data)
 {
