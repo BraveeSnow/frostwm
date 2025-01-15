@@ -24,6 +24,7 @@ struct frost_monitor
   struct wlr_output *output;
 
   struct wl_listener on_monitor_destroy;
+  struct wl_listener on_monitor_request_state;
 
   struct wl_list link;
 };
