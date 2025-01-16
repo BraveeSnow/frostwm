@@ -13,10 +13,12 @@
 
 #include <wayland-server-core.h>
 #include <wlr/types/wlr_keyboard.h>
+#include "frostwm/session.h"
 
 struct frost_keyboard
 {
-  struct wlr_keyboard *keyboard;
+  struct wlr_keyboard  *keyboard;
+  struct frost_session *session;
 
   struct wl_listener on_keyboard_destroy;
   struct wl_listener on_keyboard_pressed;

@@ -37,7 +37,8 @@ struct frost_session
   struct wlr_seat       *seat;
 
   // state
-  struct wl_list monitors; // frost_monitor::link
+  struct wl_list         monitors; // frost_monitor::link
+  struct frost_keyboard *keyboard;
 
   // event handling
   struct wl_listener on_monitor_connected;
@@ -67,6 +68,14 @@ struct frost_session *frost_session_init (void);
  * @param session The session created by @ref frost_session_init.
  */
 void frost_session_start (struct frost_session *session);
+
+/**
+ * @brief Starts the shutdown process.
+ * 
+ * Calling this before @ref frost_session_start will cause the window manager
+ * to be unable to start.
+ */
+void frost_session_shutdown (void);
 
 /**
  * @brief Destroys the FrostWM session struct.
