@@ -1,5 +1,4 @@
 #include <signal.h>
-#include <wayland-server-core.h>
 
 extern "C"
 {
