@@ -1,4 +1,5 @@
-#include "frostwm/monitor.h"
+#include <frostwm/monitor.h>
+
 #include <memory>
 #include <utility>
 

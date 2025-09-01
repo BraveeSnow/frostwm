@@ -1,4 +1,4 @@
-#include "frostwm/session.h"
+#include <frostwm/session.h>
 
 #include <memory>
 #include <stdexcept>
