@@ -9,6 +9,8 @@ extern "C"
 #include <wlr/backend.h>
 }
 
+#include <frostwm/monitor.h>
+
 struct wl_display_destroyer
 {
   void operator() (wl_display *display) const;
@@ -38,11 +40,15 @@ private:
 
   // wayland members
   std::unique_ptr<wl_display, wl_display_destroyer> _display;
-  wl_event_loop *_event_loop;
+  std::experimental::observer_ptr<wl_event_loop> _event_loop;
 
   // wlroots members
   std::unique_ptr<wlr_backend, wlr_backend_destroyer> _backend;
-  wlr_session *_session;
+  std::experimental::observer_ptr<wlr_session> _session;
+
+  // placed here because these are destroyed first
+  // DO NOT MOVE ABOVE WAYLAND FIELDS
+  frost_monitor_controller _monitor_controller;
 };
 
 #endif

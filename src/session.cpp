@@ -25,13 +25,17 @@ frost_session::frost_session ()
     : _display (wl_display_create ()),
       _event_loop (wl_display_get_event_loop (_display.get ()))
 {
+  wlr_session *session = _session.get ();
   _backend = std::unique_ptr<wlr_backend, wlr_backend_destroyer> (
-      wlr_backend_autocreate (_event_loop, &_session));
+      wlr_backend_autocreate (_event_loop.get (), &session));
 
   if (_backend == NULL)
     {
       throw std::runtime_error ("unable to initialize wlroots backend");
     }
+
+  _monitor_controller.set_backend (
+      std::experimental::make_observer<wlr_backend> (_backend.get ()));
 }
 
 frost_session::~frost_session () {}

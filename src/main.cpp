@@ -6,7 +6,7 @@ extern "C"
 #include <wlr/util/log.h>
 }
 
-#include "frostwm/session.h"
+#include <frostwm/session.h>
 
 void
 sigint_callback (int signal)

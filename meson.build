@@ -7,7 +7,8 @@ project(
 add_project_arguments(
   [
     '-DWLR_USE_UNSTABLE',
-    '-fmacro-prefix-map=../=',
+    '-fmacro-prefix-map=../src=frostwm',
+    '-Wno-unused-parameter',
   ],
   language: 'cpp',
 )
@@ -17,7 +18,7 @@ wlroots = dependency('wlroots-0.19')
 
 executable(
   'frostwm',
-  sources: files('src/main.cpp', 'src/session.cpp'),
+  sources: files('src/main.cpp', 'src/monitor.cpp', 'src/session.cpp'),
   dependencies: [wayland, wlroots],
   include_directories: include_directories('include'),
 )
