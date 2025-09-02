@@ -13,6 +13,15 @@ add_project_arguments(
   language: 'cpp',
 )
 
+if get_option('buildtype') == 'debug'
+  add_project_arguments(
+    [
+      '-ggdb',
+    ],
+    language: 'cpp'
+  )
+endif
+
 wayland = dependency('wayland-server')
 wlroots = dependency('wlroots-0.19')
 
