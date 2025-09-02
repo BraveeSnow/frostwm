@@ -68,12 +68,11 @@ void
 _on_output_destroyed_callback (struct wl_listener *listener, void *data)
 {
   frost_monitor *mon = wl_container_of (listener, mon, _on_output_destroyed);
-  std::experimental::observer_ptr<wlr_output> out (
-      reinterpret_cast<wlr_output *> (data));
 
   // unhook monitor event listeners
   wl_list_remove (&mon->_on_output_destroyed.link);
-  wlr_log (WLR_INFO, "Monitor \"%s\" disconnected", out->name);
+
+  wlr_log (WLR_INFO, "Monitor \"%s\" disconnected", mon->_monitor->name);
 }
 
 // --- class frost_monitor ---
@@ -95,7 +94,6 @@ frost_monitor::~frost_monitor ()
 
 frost_monitor_controller::frost_monitor_controller (
     std::experimental::observer_ptr<wlr_backend> backend)
-    : frost_monitor_controller ()
 {
   set_backend (backend);
 }
