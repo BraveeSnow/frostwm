@@ -28,17 +28,15 @@ wlr_allocator_destroyer::operator() (wlr_allocator *alloc) const
 void
 _on_output_connected_callback (wl_listener *listener, void *data)
 {
-  std::experimental::observer_ptr<wlr_output> monitor
-      = std::experimental::make_observer (
-          reinterpret_cast<wlr_output *> (data));
-  wlr_output_mode *preferred = wlr_output_preferred_mode (monitor.get ());
+  wlr_output *monitor = reinterpret_cast<wlr_output *> (data);
+  wlr_output_mode *preferred = wlr_output_preferred_mode (monitor);
   frost_monitor_controller *controller
       = wl_container_of (listener, controller, _on_output_connected);
   wlr_output_state state;
   std::unique_ptr<frost_monitor> container;
 
   wlr_output_state_init (&state);
-  wlr_output_init_render (monitor.get (), controller->_alloc.get (),
+  wlr_output_init_render (monitor, controller->_alloc.get (),
                           controller->_render.get ());
 
   wlr_log (WLR_INFO, "Monitor \"%s\" connected", monitor->name);
@@ -51,7 +49,7 @@ _on_output_connected_callback (wl_listener *listener, void *data)
   wlr_output_state_set_enabled (&state, true);
   wlr_output_state_set_mode (&state, preferred);
 
-  if (!wlr_output_commit_state (monitor.get (), &state))
+  if (!wlr_output_commit_state (monitor, &state))
     {
       wlr_log (WLR_ERROR, "Failed to commit state to \"%s\"", monitor->name);
     }
@@ -77,9 +75,7 @@ _on_output_destroyed_callback (struct wl_listener *listener, void *data)
 
 // --- class frost_monitor ---
 
-frost_monitor::frost_monitor (
-    std::experimental::observer_ptr<wlr_output> monitor)
-    : _monitor (monitor)
+frost_monitor::frost_monitor (wlr_output *monitor) : _monitor (monitor)
 {
   _on_output_destroyed.notify = &_on_output_destroyed_callback;
   wl_signal_add (&_monitor->events.destroy, &_on_output_destroyed);
@@ -92,8 +88,7 @@ frost_monitor::~frost_monitor ()
 
 // --- class frost_monitor_controller ---
 
-frost_monitor_controller::frost_monitor_controller (
-    std::experimental::observer_ptr<wlr_backend> backend)
+frost_monitor_controller::frost_monitor_controller (wlr_backend *backend)
 {
   set_backend (backend);
 }
@@ -105,16 +100,15 @@ frost_monitor_controller::~frost_monitor_controller ()
 }
 
 void
-frost_monitor_controller::set_backend (
-    std::experimental::observer_ptr<wlr_backend> backend)
+frost_monitor_controller::set_backend (wlr_backend *backend)
 {
   // create additional wlroots objects
   _render = std::unique_ptr<wlr_renderer, wlr_renderer_destroyer> (
-      wlr_renderer_autocreate (backend.get ()));
+      wlr_renderer_autocreate (backend));
   _alloc = std::unique_ptr<wlr_allocator, wlr_allocator_destroyer> (
-      wlr_allocator_autocreate (backend.get (), _render.get ()));
+      wlr_allocator_autocreate (backend, _render.get ()));
 
   // configure listeners
   _on_output_connected.notify = &_on_output_connected_callback;
-  wl_signal_add (&backend.get ()->events.new_output, &_on_output_connected);
+  wl_signal_add (&backend->events.new_output, &_on_output_connected);
 }

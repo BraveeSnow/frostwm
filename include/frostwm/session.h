@@ -40,11 +40,11 @@ private:
 
   // wayland members
   std::unique_ptr<wl_display, wl_display_destroyer> _display;
-  std::experimental::observer_ptr<wl_event_loop> _event_loop;
+  wl_event_loop *_event_loop;
 
   // wlroots members
   std::unique_ptr<wlr_backend, wlr_backend_destroyer> _backend;
-  std::experimental::observer_ptr<wlr_session> _session;
+  wlr_session *_session;
 
   // placed here because these are destroyed first
   // DO NOT MOVE ABOVE WAYLAND FIELDS
